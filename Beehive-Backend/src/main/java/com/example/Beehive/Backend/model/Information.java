@@ -24,7 +24,7 @@ public class Information implements Serializable {
 	@Column(name = "name", length = 50, nullable = false)
 	private String name;
 
-	@Column(name = "code", length = 100, nullable = false)
+	@Column(name = "contact", length = 100, nullable = false)
 	private String contact;
 
 	@Column(length = 140)
