@@ -6,6 +6,7 @@ This repository contains the source code for the Beehive.
 
 ## Help and Documentation
 
+* [Documentation](docs/documentation.md)
 //To-Do
 
 
