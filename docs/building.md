@@ -6,7 +6,7 @@ Ensure you have JDK 17 and Git installed
     git --version
 
 ---    
-First clone the Keycloak repository:
+First clone the beehive repository:
     
     git clone https://github.com/dipak101505/Beehive.git
     cd beehive-backend
@@ -16,7 +16,7 @@ To build beehive run:
     mvn clean install
 ### Starting beehive
 
-To start Keycloak during development first build as specified above, then run:
+To start beehive during development first build as specified above, then run:
 
     java -jar target/Beehive-Backend-0.0.1-SNAPSHOT.jar start-dev
 
