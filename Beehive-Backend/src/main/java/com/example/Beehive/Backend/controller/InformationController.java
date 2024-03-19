@@ -1,5 +1,6 @@
 package com.example.Beehive.Backend.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -77,49 +78,24 @@ public class InformationController {
 	public ResponseEntity<Information> addInfo(@RequestParam(value = "file", required = false) MultipartFile file,
 	                                          @RequestBody Information infoData) throws IOException {
 
-	    // Replace "YOUR_CLIENT_API_KEY" with your actual ImgBB API key
-	    final String API_KEY = "YOUR_CLIENT_API_KEY";
-	    final String API_URL = "https://api.imgbb.com/1/upload";
 
 	    // Save information data first
 	    Information savedInfo = informationRepo.save(infoData);
 
-	    String fileUrl="file_url";
+	    String fileUrl= "/path/to/your/upload/directory/";
 	    // Handle file upload if a file is present
 	    if (file != null && !file.isEmpty()) {
-//	        fileUrl = uploadImageToImgBB(file, API_KEY, API_URL);
-	        savedInfo.setImage_url("Api_Key_Unavailable_for_upload");
+            String filePath = fileUrl + file.getOriginalFilename();
+
+            // Save the file to the specified directory
+            File dest = new File(filePath);
+            file.transferTo(dest);
+
+	        savedInfo.setImage_url(filePath);
 	        savedInfo = informationRepo.save(informationRepo.findById(savedInfo.getId()).get()); // Persist updated information
 	    }
 
 	    return new ResponseEntity<>(savedInfo, HttpStatus.OK);
-	}
-
-	private String uploadImageToImgBB(MultipartFile file, String apiKey, String apiUrl) throws IOException {
-	    // Create a RestTemplate instance for making HTTP requests
-	    RestTemplate restTemplate = new RestTemplate();
-
-	    // Prepare request headers with API key and content type
-	    HttpHeaders headers = new HttpHeaders();
-	    headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-	    headers.set("Authorization", "key=" + apiKey);
-
-	    // Prepare multipart request entity with file data
-	    MultiValueMap<String, Object> parts = new LinkedMultiValueMap<>();
-	    parts.add("image", file.getResource());
-
-	    HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(parts, headers);
-	    ResponseEntity<String> response = restTemplate.postForEntity(apiUrl, requestEntity, String.class);
-
-
-	    // Check for successful upload and return image URL
-	    if (response.getStatusCode() == HttpStatus.OK) {
-	        Map<String, String> data = new ObjectMapper().readValue(response.getBody(), Map.class);
-//	        return data.get("data").get("url");
-	        return "url";
-	    } else {
-	        throw new RuntimeException("Error uploading image to ImgBB: " + response.getStatusCode());
-	    }
 	}
 
 }
